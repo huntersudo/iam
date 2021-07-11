@@ -47,7 +47,7 @@ to quickly create a Cobra application.`)
 		iamctl helloworld marmotedu marmotedupass`)
 
 	helloworldUsageErrStr = fmt.Sprintf(
-		"expected '%s'.\nUSERNAME and PASSWORD are required arguments for the helloworld command",
+		"expected '%s'.\nUSERNAME and PASSWORD are required arguments for the helloworld-fix command",
 		helloworldUsageStr,
 	)
 )
