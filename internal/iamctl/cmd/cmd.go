@@ -16,6 +16,7 @@ import (
 
 	"github.com/marmotedu/iam/internal/iamctl/cmd/color"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/completion"
+	"github.com/marmotedu/iam/internal/iamctl/cmd/helloworld"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/info"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/jwt"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/new"
@@ -115,6 +116,13 @@ func NewIAMCtlCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			Commands: []*cobra.Command{
 				set.NewCmdSet(f, ioStreams),
 				completion.NewCmdCompletion(ioStreams.Out, ""),
+			},
+		},
+		{
+			Message: "Troubleshooting and Debugging Commands:",
+			Commands: []*cobra.Command{
+				validate.NewCmdValidate(f, ioStreams),
+				helloworld.NewCmdHelloworld(f, ioStreams),
 			},
 		},
 	}
