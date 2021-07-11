@@ -179,6 +179,7 @@ check-updates:
 	@$(MAKE) go.updates
 
 ## help: Show this help info.
+## 自动解析 Makefile 中 ## 开头的注释行，从而自动生成 make help 输出
 .PHONY: help
 help: Makefile
 	@echo -e "\nUsage: make <TARGETS> <OPTIONS> ...\n\nTargets:"
