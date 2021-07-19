@@ -5,7 +5,9 @@ go 1.16
 require (
 	github.com/AlekSi/pointer v1.1.0
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
+	github.com/alecthomas/units v0.0.0-20210208195552-ff826a37aa15 // indirect
 	github.com/appleboy/gin-jwt/v2 v2.6.4
+	github.com/arnaud-deprez/gsemver v0.5.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/buger/jsonparser v1.1.1
 	github.com/coreos/bbolt v1.3.2 // indirect
@@ -16,22 +18,32 @@ require (
 	github.com/dgraph-io/ristretto v0.0.3
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/fatih/color v1.12.0
+	github.com/fatih/structs v1.1.0 // indirect
+	github.com/felixge/httpsnoop v1.0.2 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.6.3
+	github.com/git-chglog/git-chglog v0.15.0 // indirect
+	github.com/go-openapi/analysis v0.20.1 // indirect
+	github.com/go-openapi/jsonreference v0.19.6 // indirect
+	github.com/go-openapi/runtime v0.19.29 // indirect
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-redis/redis/v7 v7.4.0
+	github.com/go-swagger/go-swagger v0.27.0 // indirect
 	github.com/golang/mock v1.6.0
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/gosuri/uitable v0.0.4
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/influxdata/influxdb v1.8.4
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jinzhu/now v1.1.1
 	github.com/jonboulle/clockwork v0.2.0 // indirect
+	github.com/jstemmer/go-junit-report v0.9.1 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/klauspost/compress v1.11.0 // indirect
 	github.com/kr/pretty v0.2.1 // indirect
@@ -39,12 +51,15 @@ require (
 	github.com/lib/pq v1.9.0 // indirect
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/marmotedu/addlicense v1.0.0 // indirect
 	github.com/marmotedu/api v1.0.1
 	github.com/marmotedu/component-base v1.0.0
 	github.com/marmotedu/errors v1.0.2
 	github.com/marmotedu/marmotedu-sdk-go v1.0.2-0.20210528170801-2c91b80cb4cf
 	github.com/mattn/go-isatty v0.0.13
 	github.com/mattn/go-runewidth v0.0.13 // indirect
+	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
+	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635
@@ -60,6 +75,7 @@ require (
 	github.com/russross/blackfriday v1.6.0
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0
+	github.com/segmentio/golines v0.4.0 // indirect
 	github.com/segmentio/kafka-go v0.4.12
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
@@ -69,13 +85,16 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20200427203606-3cfed13b9966 // indirect
 	github.com/tpkeeper/gin-dump v1.0.0
+	github.com/trivago/tgo v1.0.7 // indirect
 	github.com/vmihailenco/msgpack v3.3.3+incompatible
 	github.com/zsais/go-gin-prometheus v0.1.0
+	go.mongodb.org/mongo-driver v1.5.4 // indirect
 	go.uber.org/zap v1.17.0
-	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	golang.org/x/tools v0.1.4
 	google.golang.org/grpc v1.38.0

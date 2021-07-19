@@ -24,7 +24,7 @@ func NewApp(basename string) *app.App {
 	opts := options.NewOptions()
 	application := app.NewApp("IAM API Server",
 		basename,
-		app.WithOptions(opts),
+		app.WithOptions(opts),  // todo  Options implement CliOptions
 		app.WithDescription(commandDesc),
 		app.WithDefaultValidArgs(),
 		app.WithRunFunc(run(opts)),
@@ -36,7 +36,7 @@ func NewApp(basename string) *app.App {
 func run(opts *options.Options) app.RunFunc {
 	return func(basename string) error {
 		log.Init(opts.Log)
-		defer log.Flush()
+		defer log.Flush() // todo ???
 
 		cfg, err := config.CreateConfigFromOptions(opts)
 		if err != nil {

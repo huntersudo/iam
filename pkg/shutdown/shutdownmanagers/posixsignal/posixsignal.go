@@ -52,7 +52,7 @@ func (posixSignalManager *PosixSignalManager) Start(gs shutdown.GSInterface) err
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, posixSignalManager.signals...)
 
-		// Block until a signal is received.
+		// todo : Block until a signal is received.
 		<-c
 
 		gs.StartShutdown(posixSignalManager)

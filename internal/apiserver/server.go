@@ -32,7 +32,7 @@ type apiServer struct {
 	genericAPIServer *genericapiserver.GenericAPIServer
 }
 
-type preparedAPIServer struct {
+type preparedAPIServer struct {  //todo help type[Run] for insulate apiServer[PrepareRun]
 	*apiServer
 }
 
@@ -46,7 +46,7 @@ type ExtraConfig struct {
 }
 
 func createAPIServer(cfg *config.Config) (*apiServer, error) {
-	gs := shutdown.New()
+	gs := shutdown.New()  // todo callback and managers !!!
 	gs.AddShutdownManager(posixsignal.NewPosixSignalManager())
 
 	genericConfig, err := buildGenericConfig(cfg)
@@ -59,17 +59,17 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	genericServer, err := genericConfig.Complete().New()
+	genericServer, err := genericConfig.Complete().New()  // a new instance of GenericAPIServer -Gin
 	if err != nil {
 		return nil, err
 	}
-	extraServer, err := extraConfig.complete().New()
+	extraServer, err := extraConfig.complete().New()  //create a grpcAPIServer instance
 	if err != nil {
 		return nil, err
 	}
 
 	server := &apiServer{
-		gs:               gs,
+		gs:               gs, //gracefulShutDown
 		redisOptions:     cfg.RedisOptions,
 		genericAPIServer: genericServer,
 		gRPCAPIServer:    extraServer,
@@ -79,11 +79,11 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 }
 
 func (s *apiServer) PrepareRun() preparedAPIServer {
-	initRouter(s.genericAPIServer.Engine)
+	initRouter(s.genericAPIServer.Engine) // just for gin
 
 	s.initRedisStore()
 
-	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error { // ShutdownFunc as ShutdownCallback
 		mysqlStore, _ := mysql.GetMySQLFactoryOr(nil)
 		if mysqlStore != nil {
 			return mysqlStore.Close()

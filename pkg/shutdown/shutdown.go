@@ -172,12 +172,12 @@ type ShutdownCallback interface {
 }
 
 // ShutdownFunc is a helper type, so you can easily provide anonymous functions
-// as ShutdownCallbacks.
+// as ShutdownCallbacks.  todo help type[ShutdownFunc] as ShutdownCallbacks --------------------
 type ShutdownFunc func(string) error
 
 // OnShutdown defines the action needed to run when shutdown triggered.
 func (f ShutdownFunc) OnShutdown(shutdownManager string) error {
-	return f(shutdownManager)
+	return f(shutdownManager)  //todo call self
 }
 
 // ShutdownManager is an interface implemnted by ShutdownManagers.
@@ -281,16 +281,18 @@ func (gs *GracefulShutdown) SetErrorHandler(errorHandler ErrorHandler) {
 // call all ShutdownCallbacks, wait for callbacks to finish and
 // call ShutdownFinish on ShutdownManager.
 func (gs *GracefulShutdown) StartShutdown(sm ShutdownManager) {
-	gs.ReportError(sm.ShutdownStart())
+	gs.ReportError(sm.ShutdownStart()) //if error then to handler
 
 	var wg sync.WaitGroup
 	for _, shutdownCallback := range gs.callbacks {
 		wg.Add(1)
+		// todo : goroutine to run
 		go func(shutdownCallback ShutdownCallback) {
+		//go func(shutdownCallback string) {
 			defer wg.Done()
+			gs.ReportError(shutdownCallback.OnShutdown(sm.GetName())) // which manager call this callback
+		}(shutdownCallback)  // (f)  handler over to go fun(f ), func embed func
 
-			gs.ReportError(shutdownCallback.OnShutdown(sm.GetName()))
-		}(shutdownCallback)
 	}
 
 	wg.Wait()

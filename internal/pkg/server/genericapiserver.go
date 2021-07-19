@@ -147,7 +147,7 @@ func (s *GenericAPIServer) Run() error {
 	}
 
 	var eg errgroup.Group
-
+    // todo  -----------------------------
 	// Initializing the server in a goroutine so that
 	// it won't block the graceful shutdown handling below
 	eg.Go(func() error {
@@ -182,7 +182,7 @@ func (s *GenericAPIServer) Run() error {
 
 		return nil
 	})
-
+	// todo ----------------------
 	// Ping the server to make sure the router is working.
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
