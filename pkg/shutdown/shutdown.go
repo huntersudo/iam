@@ -291,7 +291,7 @@ func (gs *GracefulShutdown) StartShutdown(sm ShutdownManager) {
 		//go func(shutdownCallback string) {
 			defer wg.Done()
 			gs.ReportError(shutdownCallback.OnShutdown(sm.GetName())) // which manager call this callback
-		}(shutdownCallback)  // (f)  handler over to go fun(f ), func embed func
+		}(shutdownCallback)  // (f)  handler over to go fun(f ),
 
 	}
 

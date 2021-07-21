@@ -168,7 +168,7 @@ func NewApp(name string, basename string, opts ...Option) *App {
 
 	return a
 }
-
+// build CMD
 func (a *App) buildCommand() {
 	cliflag.InitFlags()
 
@@ -186,14 +186,14 @@ func (a *App) buildCommand() {
 	cmd.SetErr(os.Stderr)
 	cmd.Flags().SortFlags = true
 
-	if len(a.commands) > 0 {
+	if len(a.commands) > 0 {  // todo sub command
 		for _, command := range a.commands {
 			cmd.AddCommand(command.cobraCommand())
 		}
 		cmd.SetHelpCommand(helpCommand(a.name))
 	}
 	if a.runFunc != nil {
-		cmd.RunE = a.runCommand
+		cmd.RunE = a.runCommand  // todo RunE
 	}
 
 	var namedFlagSets cliflag.NamedFlagSets
@@ -244,7 +244,7 @@ func (a *App) Run() {
 func (a *App) Command() *cobra.Command {
 	return a.cmd
 }
-
+// todo for RunE
 func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 	printWorkingDir()
 	cliflag.PrintFlags(cmd.Flags())
@@ -277,7 +277,7 @@ func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	// run application
+	// run application TODO return fun: to launch app and return errors : app.WithRunFunc(run(opts)),
 	if a.runFunc != nil {
 		return a.runFunc(a.basename)
 	}
