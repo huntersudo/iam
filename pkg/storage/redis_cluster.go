@@ -120,7 +120,7 @@ type RedisCluster struct {
 
 func clusterConnectionIsOpen(cluster RedisCluster) bool {
 	c := singleton(cluster.IsCache)
-	testKey := "redis-test-" + uuid.NewV4().String()
+	testKey := "redis-test-" + uuid.Must(uuid.NewV4()).String()
 	if err := c.Set(testKey, "test", time.Second).Err(); err != nil {
 		log.Warnf("Error trying to set test key: %s", err.Error())
 
@@ -906,26 +906,17 @@ func (r *RedisCluster) StartPubSubHandler(channel string, callback func(interfac
 	pubsub := client.Subscribe(channel)
 	defer pubsub.Close()
 
-	for {
-		msg, err := pubsub.Receive()
-		if err != nil {
-			log.Errorf("Error while receiving pubsub message: %s", err.Error())
+	if _, err := pubsub.Receive(); err != nil {
+		log.Errorf("Error while receiving pubsub message: %s", err.Error())
 
-			return err
-		}
-		switch v := msg.(type) {
-		case *redis.Message:
-			callback(v)
-
-		case *redis.Subscription:
-			callback(v)
-
-		case error:
-			log.Errorf("Redis disconnected or error received, attempting to reconnect: %v", v)
-
-			return v
-		}
+		return err
 	}
+
+	for msg := range pubsub.Channel() {
+		callback(msg)
+	}
+
+	return nil
 }
 
 // Publish publish a message to the specify channel.

@@ -79,7 +79,7 @@ type App struct {
 }
 
 // Option defines optional parameters for initializing the application
-// structure. todo------help type func
+// structure.
 type Option func(*App)
 
 // WithOptions to open the application's function to read from the command line
@@ -90,7 +90,7 @@ func WithOptions(opt CliOptions) Option {
 	}
 }
 
-// RunFunc defines the application's startup callback function. todo abstract for all
+// RunFunc defines the application's startup callback function.
 type RunFunc func(basename string) error
 
 // WithRunFunc is used to set the application startup callback function option.
@@ -156,11 +156,11 @@ func WithDefaultValidArgs() Option {
 // binary name, and other options.
 func NewApp(name string, basename string, opts ...Option) *App {
 	a := &App{
-		name:     name,  //"IAM API Server" 应用的简短描述
-		basename: basename, // "iam-apiserver" 应用的二进制文件名
+		name:     name,
+		basename: basename,
 	}
 
-	for _, o := range opts { // todo Option o ->> func(a *App) , cli,desc,ValidArgs,runFunc
+	for _, o := range opts {
 		o(a)
 	}
 
@@ -168,10 +168,8 @@ func NewApp(name string, basename string, opts ...Option) *App {
 
 	return a
 }
-// build CMD
-func (a *App) buildCommand() {
-	cliflag.InitFlags()
 
+func (a *App) buildCommand() {
 	cmd := cobra.Command{
 		Use:   FormatBaseName(a.basename),
 		Short: a.name,
@@ -185,20 +183,21 @@ func (a *App) buildCommand() {
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
 	cmd.Flags().SortFlags = true
+	cliflag.InitFlags(cmd.Flags())
 
-	if len(a.commands) > 0 {  // todo sub command
+	if len(a.commands) > 0 {
 		for _, command := range a.commands {
 			cmd.AddCommand(command.cobraCommand())
 		}
 		cmd.SetHelpCommand(helpCommand(a.name))
 	}
 	if a.runFunc != nil {
-		cmd.RunE = a.runCommand  // todo RunE
+		cmd.RunE = a.runCommand
 	}
 
 	var namedFlagSets cliflag.NamedFlagSets
 	if a.options != nil {
-		namedFlagSets = a.options.Flags() //todo Flags returns flags for a specific APIServer by section name.
+		namedFlagSets = a.options.Flags()
 		fs := cmd.Flags()
 		for _, f := range namedFlagSets.FlagSets {
 			fs.AddFlagSet(f)
@@ -206,12 +205,10 @@ func (a *App) buildCommand() {
 
 		usageFmt := "Usage:\n  %s\n"
 		cols, _, _ := term.TerminalSize(cmd.OutOrStdout())
-		// todo 执行 -h/--help 时，输出的帮助信息。通过 cmd.SetHelpFunc 函数可以指定帮助信息。
 		cmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
 			fmt.Fprintf(cmd.OutOrStdout(), "%s\n\n"+usageFmt, cmd.Long, cmd.UseLine())
 			cliflag.PrintSections(cmd.OutOrStdout(), namedFlagSets, cols)
 		})
-		// todo 当用户提供无效的标志或命令时，向用户显示“使用信息”。通过 cmd.SetUsageFunc 函数，可以指定使用信息
 		cmd.SetUsageFunc(func(cmd *cobra.Command) error {
 			fmt.Fprintf(cmd.OutOrStderr(), usageFmt, cmd.UseLine())
 			cliflag.PrintSections(cmd.OutOrStderr(), namedFlagSets, cols)
@@ -220,7 +217,6 @@ func (a *App) buildCommand() {
 		})
 	}
 
-	// todo  在 global 分组下添加 --version 和 --config 选项
 	if !a.noVersion {
 		verflag.AddFlags(namedFlagSets.FlagSet("global"))
 	}
@@ -244,7 +240,7 @@ func (a *App) Run() {
 func (a *App) Command() *cobra.Command {
 	return a.cmd
 }
-// todo for RunE
+
 func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 	printWorkingDir()
 	cliflag.PrintFlags(cmd.Flags())
@@ -277,7 +273,7 @@ func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	// run application TODO return fun: to launch app and return errors : app.WithRunFunc(run(opts)),
+	// run application
 	if a.runFunc != nil {
 		return a.runFunc(a.basename)
 	}
@@ -286,17 +282,16 @@ func (a *App) runCommand(cmd *cobra.Command, args []string) error {
 }
 
 func (a *App) applyOptionRules() error {
-	// todo 配置补全是否可补全  x.(T)
 	if completeableOptions, ok := a.options.(CompleteableOptions); ok {
 		if err := completeableOptions.Complete(); err != nil {
 			return err
 		}
 	}
-    // 调用 Validate 方法来校验参数
+
 	if errs := a.options.Validate(); len(errs) != 0 {
 		return errors.NewAggregate(errs)
 	}
-     // 配置是否可打印 x.(T)
+
 	if printableOptions, ok := a.options.(PrintableOptions); ok && !a.silence {
 		log.Infof("%v Config: `%s`", progressMessage, printableOptions.String())
 	}

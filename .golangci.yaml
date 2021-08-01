@@ -311,6 +311,7 @@ linters-settings:
         - golang.org
         - github.com
         - go.uber.org
+        - go.etcd.io
     blocked:
       modules:
         - github.com/pkg/errors:
@@ -629,7 +630,8 @@ issues:
 
     - linters:
       - typecheck
-      path: (pkg/storage/.*)\.go
+        #path: (pkg/storage/.*)\.go
+      path: (internal/.*|pkg/.*)\.go
 
     - path: (cmd/.*|test/.*|tools/.*)\.go
       linters:
