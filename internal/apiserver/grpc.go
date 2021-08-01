@@ -17,6 +17,7 @@ type grpcAPIServer struct {
 	address string
 }
 
+// Run todo [BP]
 func (s *grpcAPIServer) Run() {
 	listen, err := net.Listen("tcp", s.address)
 	if err != nil {
