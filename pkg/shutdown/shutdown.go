@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
+
 /*
 Package shutdown Providing shutdown callbacks for graceful app shutdown
 
@@ -226,6 +227,7 @@ type GracefulShutdown struct {
 }
 
 // New initializes GracefulShutdown.
+//  todo example
 func New() *GracefulShutdown {
 	return &GracefulShutdown{
 		callbacks: make([]ShutdownCallback, 0, 10),

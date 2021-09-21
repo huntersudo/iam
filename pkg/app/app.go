@@ -194,7 +194,7 @@ func (a *App) buildCommand() {
 	if a.runFunc != nil {
 		cmd.RunE = a.runCommand
 	}
-
+    // todo 1、iam-apiserver 根据 Options 配置来构建命令行参数和应用配置。
 	var namedFlagSets cliflag.NamedFlagSets
 	if a.options != nil {
 		namedFlagSets = a.options.Flags()

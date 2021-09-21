@@ -10,8 +10,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-
-	"github.com/marmotedu/iam/internal/pkg/logger"
+	"gorm.io/gorm/logger"
 )
 
 // Options defines optsions for mysql database.
@@ -24,11 +23,12 @@ type Options struct {
 	MaxOpenConnections    int
 	MaxConnectionLifeTime time.Duration
 	LogLevel              int
+	Logger                logger.Interface
 }
 
 // New create a new gorm db instance with the given options.
 func New(opts *Options) (*gorm.DB, error) {
-	dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
+	dsn := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
 		opts.Username,
 		opts.Password,
 		opts.Host,
@@ -36,8 +36,8 @@ func New(opts *Options) (*gorm.DB, error) {
 		true,
 		"Local")
 
-	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
-		Logger: logger.New(opts.LogLevel),
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: opts.Logger,
 	})
 	if err != nil {
 		return nil, err

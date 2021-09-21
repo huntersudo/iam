@@ -19,6 +19,8 @@ const (
 )
 
 // RequestID is a middleware that injects a 'X-Request-ID' into the context and request/response header of each request.
+// todo 主要用来在 HTTP 请求和返回头中设置 X-Request-ID Header。如果 HTTP 请求头中没有 X-Request-IDHTTP 头，
+//  则创建 64 位的 UUID，如果有就复用。UUID 是调用 github.com/satori/go.uuid包提供的 NewV4().String()方法来生成的
 func RequestID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Check for incoming header, use it if exists

@@ -90,6 +90,7 @@ func (s *GenericAPIServer) Setup() {
 }
 
 // InstallMiddlewares install generic middlewares.
+// todo InstallMiddlewares
 func (s *GenericAPIServer) InstallMiddlewares() {
 	// necessary middlewares
 	s.Use(middleware.RequestID())
@@ -237,7 +238,7 @@ func (s *GenericAPIServer) ping(ctx context.Context) error {
 
 		// Sleep for a second to continue the next ping.
 		log.Info("Waiting for the router, retry in 1 second.")
-		time.Sleep(time.Second)
+		time.Sleep(1 * time.Second)
 
 		select {
 		case <-ctx.Done():

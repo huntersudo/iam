@@ -79,7 +79,7 @@ func installController(g *gin.Engine) *gin.Engine {
 
 		// secret RESTful resource
 		secretv1 := v1.Group("/secrets", middleware.Publish())
-		{
+		{   // todo 初始化的过程，后面接口的模板化
 			secretController := secret.NewSecretController(storeIns)
 
 			secretv1.POST("", secretController.Create)

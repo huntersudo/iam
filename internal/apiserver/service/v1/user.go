@@ -6,11 +6,10 @@ package v1
 
 import (
 	"context"
-	"sync"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
+	"sync"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
@@ -39,12 +38,14 @@ func newUsers(srv *service) *userService {
 	return &userService{store: srv.store}
 }
 
-// ListUser returns user list in the storage. This function has a good performance.
+// List ListUser returns user list in the storage. This function has a good performance.
+// todo 并发模板：第一个功能，goroutine 报错即返回
+// 第二个功能，保持查询顺序。
+// 第三个功能，并发安全。
 func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
 	users, err := u.store.Users().List(ctx, opts)
 	if err != nil {
 		log.L(ctx).Errorf("list users from storage failed: %s", err.Error())
-
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
@@ -52,9 +53,9 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	errChan := make(chan error, 1)
 	finished := make(chan bool, 1)
 
-	var m sync.Map
+	var m sync.Map  // 第三个功能，并发安全。
 
-	// Improve query efficiency in parallel
+	// Improve query efficiency in parallel  todo 协程池
 	for _, user := range users.Items {
 		wg.Add(1)
 
@@ -65,10 +66,9 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 			policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
 			if err != nil {
 				errChan <- errors.WithCode(code.ErrDatabase, err.Error())
-
 				return
 			}
-
+            // 处理的结构保存在map中 ，ID 为序
 			m.Store(user.ID, &v1.User{
 				ObjectMeta: metav1.ObjectMeta{
 					ID:         user.ID,
@@ -94,7 +94,10 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	select {
 	case <-finished:
 	case err := <-errChan:
+		// 第一个功能，goroutine 报错即返回
 		return nil, err
+	//case <-time.After(time.Duration(30 * time.Second)):
+	//	return nil, fmt.Errorf("list users timeout after 30 seconds")
 	}
 
 	// infos := make([]*v1.User, 0)

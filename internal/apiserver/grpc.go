@@ -33,6 +33,26 @@ func (s *grpcAPIServer) Run() {
 	log.Infof("start grpc server at %s", s.address)
 }
 
+func (s *grpcAPIServer) Run2(stopCh <-chan struct{}) {
+	listen, err := net.Listen("tcp", s.address)
+	if err != nil {
+		log.Fatalf("failed to listen: %s", err.Error())
+	}
+
+	log.Infof("Start grpc server at %s", s.address)
+
+	go func() {
+		if err := s.Serve(listen); err != nil {
+			log.Fatalf("failed to start grpc server: %s", err.Error())
+		}
+	}()
+
+	<-stopCh
+
+	log.Infof("Grpc server on %s stopped", s.address)
+	s.GracefulStop()
+}
+
 func (s *grpcAPIServer) Close() {
 	s.GracefulStop()
 	log.Infof("GRPC server on %s stopped", s.address)

@@ -21,6 +21,8 @@ Find more iam-apiserver information at:
 
 // NewApp creates a App object with default parameters.
 func NewApp(basename string) *app.App {
+	// 创建带有默认值的 Options 类型变量 opts
+	// 最终在 App 框架中，被来自于命令行参数或配置文件的配置（也可能是二者 Merge 后的配置）所填充，opts 变量中各个字段的值会用来创建应用配置
 	opts := options.NewOptions()
 	application := app.NewApp("IAM API Server",
 		basename,
@@ -36,8 +38,9 @@ func NewApp(basename string) *app.App {
 func run(opts *options.Options) app.RunFunc {
 	return func(basename string) error {
 		log.Init(opts.Log)
-		defer log.Flush() // todo ???
+		defer log.Flush() // todo
 
+        // todo 2 通过CreateConfigFromOptions函数来构建应用配置：
 		cfg, err := config.CreateConfigFromOptions(opts)
 		if err != nil {
 			return err

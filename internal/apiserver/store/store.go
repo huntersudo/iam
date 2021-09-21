@@ -5,10 +5,11 @@
 package store
 
 //go:generate mockgen -self_package=github.com/marmotedu/iam/internal/apiserver/store -destination mock_store.go -package store github.com/marmotedu/iam/internal/apiserver/store Factory,UserStore,SecretStore,PolicyStore
-
+// todo 自动化 mock db
 var client Factory
 
 // Factory defines the iam platform storage interface.
+// TODO 工厂方法模式
 type Factory interface {
 	Users() UserStore
 	Secrets() SecretStore

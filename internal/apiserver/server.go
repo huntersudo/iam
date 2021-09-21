@@ -45,6 +45,9 @@ type ExtraConfig struct {
 	// etcdOptions      *genericoptions.EtcdOptions
 }
 
+// todo cfg持有 填充后的 options
+//   根据应用配置，创建 HTTP/GRPC 服务器所使用的配置。在创建配置后，会先分别进行配置补全，再使用补全后的配置创建 Web 服务实例
+
 func createAPIServer(cfg *config.Config) (*apiServer, error) {
 	gs := shutdown.New()  // todo callback and managers !!!
 	gs.AddShutdownManager(posixsignal.NewPosixSignalManager())
@@ -159,7 +162,7 @@ func buildGenericConfig(cfg *config.Config) (genericConfig *genericapiserver.Con
 	if lastErr = cfg.SecureServing.ApplyTo(genericConfig); lastErr != nil {
 		return
 	}
-
+   // // todo 3 根据应用配置来构建 HTTP/GRPC 服务配置。
 	if lastErr = cfg.InsecureServing.ApplyTo(genericConfig); lastErr != nil {
 		return
 	}
@@ -180,7 +183,11 @@ func buildExtraConfig(cfg *config.Config) (*ExtraConfig, error) {
 
 func (s *apiServer) initRedisStore() {
 	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		cancel()
+
+		return nil
+	}))
 
 	config := &storage.Config{
 		Host:                  s.redisOptions.Host,
@@ -198,6 +205,6 @@ func (s *apiServer) initRedisStore() {
 		SSLInsecureSkipVerify: s.redisOptions.SSLInsecureSkipVerify,
 	}
 
-	// try to connect to redis
+	// try to connect to redis  todo 扔到一个协程里
 	go storage.ConnectToRedis(ctx, config)
 }

@@ -6,7 +6,7 @@
 .DEFAULT_GOAL := all
 
 .PHONY: all
-all: gen add-copyright format lint cover build
+all: tidy gen add-copyright format lint cover build
 
 # ==============================================================================
 # Build options
@@ -177,6 +177,10 @@ tools:
 .PHONY: check-updates
 check-updates:
 	@$(MAKE) go.updates
+
+.PHONY: tidy
+tidy:
+	@$(GO) mod tidy
 
 ## help: Show this help info.
 ## 自动解析 Makefile 中 ## 开头的注释行，从而自动生成 make help 输出

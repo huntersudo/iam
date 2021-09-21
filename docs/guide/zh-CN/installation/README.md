@@ -36,7 +36,7 @@ passwd: all authentication tokens updated successfully.
 
 2. 添加sudoers
 
-root用户的密码一般是由系统管理员维护，并定期更改。但普通用户可能要用到root的一些权限，不可能每次都向管理员询问密码。最常用的方法是，将普通用户加入到sudoers中，这样普通用户就可���通过sudo命令来暂时获取root的权限。执行如下命令添加：
+root用户的密码一般是由系统管理员维护，并定期更改。但普通用户可能要用到root的一些权限，不可能每次都向管理员询问密码。最常用的方法是，将普通用户加入到sudoers中，这样普通用户就可以通过sudo命令来暂时获取root的权限。执行如下命令添加：
 
 ```bash
 # sed -i '/^root.*ALL=(ALL).*ALL/a\going\tALL=(ALL) \tALL' /etc/sudoers
@@ -51,6 +51,9 @@ $ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的�
 $ version=latest && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 ```
+
+> 你也可以安装指定的版本，只需设置`version=$targetVersion`即可，例如：`version=v1.1.0`
+
 通过以上方式安装好系统后，以下组件的密码均默认为 `iam59!z$`：
 - MariaDB
 - Redis

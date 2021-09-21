@@ -131,3 +131,4 @@ func (u *users) ListOptional(ctx context.Context, opts metav1.ListOptions) (*v1.
 
 	return ret, d.Error
 }
+

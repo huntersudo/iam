@@ -9,6 +9,7 @@ package v1
 import "github.com/marmotedu/iam/internal/apiserver/store"
 
 // Service defines functions used to return resource interface.
+// TODO 工厂方法模式。Service是工厂接口，里面包含了一系列创建具体业务层对象的工厂函数：Users()、Secrets()、Policies()。
 type Service interface {
 	Users() UserSrv
 	Secrets() SecretSrv

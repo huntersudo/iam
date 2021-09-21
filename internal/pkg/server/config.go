@@ -99,6 +99,8 @@ type CompletedConfig struct {
 
 // Complete fills in any fields not set that are required to have valid data and can be derived
 // from other fields. If you're going to `ApplyOptions`, do that first. It's mutating the receiver.
+// todo 这里有个设计技巧：complete函数返回的是一个*completedExtraConfig类型的实例，在创建 GRPC 实例时，
+//  是调用completedExtraConfig结构体提供的New方法，这种设计方法可以确保我们创建的 GRPC 实例一定是基于 complete 之后的配置（completed）。
 func (c *Config) Complete() CompletedConfig {
 	return CompletedConfig{c}
 }
@@ -128,6 +130,7 @@ func LoadConfig(cfg string, defaultName string) {
 	} else {
 		viper.AddConfigPath(".")
 		viper.AddConfigPath(filepath.Join(homedir.HomeDir(), RecommendedHomeDir))
+		viper.AddConfigPath("/etc/iam")
 		viper.SetConfigName(defaultName)
 	}
 
